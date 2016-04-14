@@ -1,0 +1,33 @@
+{
+  "name": "arcgis-rest-client",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "eslint": "eslint lib/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IAlexandr/arcgis-rest-client.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IAlexandr/arcgis-rest-client/issues"
+  },
+  "homepage": "https://github.com/IAlexandr/arcgis-rest-client#readme",
+  "dependencies": {
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-register": "^6.7.2",
+    "body-parser": "^1.15.0",
+    "debug": "^2.2.0",
+    "superagent": "^1.8.3",
+    "superagent-proxy": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "eslint-config-airbnb": "^5.0.0",
+    "pre-commit": "^1.1.2"
+  }
+}
