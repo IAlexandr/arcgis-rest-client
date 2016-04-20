@@ -94,7 +94,7 @@ var FeatureServer = function () {
             return reject(new Error('Query error (JSON parse error).'));
           }
           if (!!resBody.error) {
-            throw new Error('Arcgis server: ' + resBody.error.message);
+            return reject(new Error('Arcgis server: ' + resBody.error.message));
           }
           return resolve(resBody);
         });
@@ -131,7 +131,7 @@ var FeatureServer = function () {
             return reject(new Error('Query error (JSON parse error).'));
           }
           if (!!resBody.error) {
-            throw new Error('Arcgis server: ' + resBody.error.message);
+            return reject(new Error('Arcgis server: ' + resBody.error.message));
           }
           return resolve(resBody);
         });
@@ -167,15 +167,7 @@ var FeatureServer = function () {
 
       params.f = 'json';
 
-      if (params.objectIds) {
-        if (Object.prototype.toString.call(params.objectIds) === '[object Array]') {
-          params.objectIds = params.objectIds.join(', ');
-        } else {
-          if (typeof params.objectIds !== 'string') {
-            log('objectIds type not supported.');
-          }
-        }
-      }
+      params = this.prepObjectIds(params);
       log('query params:', params);
       return this.checkToken(params).then(function (params) {
         return _this3.getRequest(_this3.featureServerUrl + '/query', params);
@@ -208,7 +200,7 @@ var FeatureServer = function () {
       }).then(function (resBody) {
         if (!resBody.addResults) {
           // todo: error.message содержит больше данных
-          throw new Error('Add error.');
+          return Promise.reject(new Error('Add error.'));
         }
         return resBody;
       });
@@ -227,16 +219,31 @@ var FeatureServer = function () {
       }).then(function (resBody) {
         if (!resBody.updateResults) {
           // todo: error.message содержит больше данных
-          throw new Error('Update error.');
+          return Promise.reject(new Error('Update error.'));
         }
         return resBody;
       });
+    }
+  }, {
+    key: 'prepObjectIds',
+    value: function prepObjectIds(params) {
+      if (params.objectIds) {
+        if (Object.prototype.toString.call(params.objectIds) === '[object Array]') {
+          params.objectIds = params.objectIds.join(', ');
+        } else {
+          if (typeof params.objectIds !== 'string') {
+            log('objectIds type not supported.');
+          }
+        }
+      }
+      return params;
     }
   }, {
     key: 'delete',
     value: function _delete(params) {
       var _this6 = this;
 
+      params = this.prepObjectIds(params);
       params.rollbackOnFailure = true;
       log('delete params:', params);
       return this.checkToken(params).then(function (params) {
@@ -244,7 +251,7 @@ var FeatureServer = function () {
       }).then(function (resBody) {
         if (!resBody.success) {
           // todo: error.message содержит больше данных
-          throw new Error('Delete error.');
+          return Promise.reject(new Error('Delete error.'));
         }
         return resBody;
       });
@@ -266,7 +273,7 @@ var FeatureServer = function () {
         if (!!resBody.addAttachmentResult) {
           log('!resBody.addAttachmentResult', resBody);
           // todo: error.message содержит больше данных
-          throw new Error('addAttachmentResult error.');
+          return Promise.reject(new Error('addAttachmentResult error.'));
         }
         return Promise.resolve(resBody);
       });
@@ -285,7 +292,7 @@ var FeatureServer = function () {
         var url = _this8.featureServerUrl + '/' + objId + '/addAttachment';
         var r = _request2.default.post(url, function (err, resp, body) {
           if (err) {
-            throw err;
+            return Promise.reject(err);
           }
           log(err, body);
           return resolve(body);
@@ -308,14 +315,14 @@ var FeatureServer = function () {
         params.objId = props.objId;
         var rs = _request2.default.get(props.fileUrl);
         rs.on('error', function (err) {
-          throw err;
+          return Promise.reject(err);
         });
         params.rs = rs;
         return _this9.addAttach(params);
       }).then(function (resBody) {
         log(JSON.stringify(resBody));
         if (!resBody.addAttachmentResult) {
-          throw new Error('addAttachmentUrl error.');
+          return Promise.reject(new Error('addAttachmentUrl error.'));
         }
         return resBody;
       });
@@ -335,11 +342,11 @@ var FeatureServer = function () {
           params.attachmentIds = params.attachmentIds.join(', ');
         } else {
           if (typeof params.attachmentIds !== 'string') {
-            throw new Error('attachmentIds type not supported.');
+            return Promise.reject(new Error('attachmentIds type not supported.'));
           }
         }
       } else {
-        throw new Error('attachmentIds is empty.');
+        return Promise.reject(new Error('attachmentIds is empty.'));
       }
       log('deleteAttachment params: ', params);
       return this.checkToken(params).then(function (params) {
@@ -347,7 +354,7 @@ var FeatureServer = function () {
       }).then(function (resBody) {
         if (!resBody.deleteAttachmentResults) {
           // todo: error.message содержит больше данных
-          throw new Error('deleteAttachmentResults error.');
+          return Promise.reject(new Error('deleteAttachmentResults error.'));
         }
         return resBody;
       });
@@ -366,7 +373,7 @@ var FeatureServer = function () {
       }).then(function (resBody) {
         if (!resBody.attachmentInfos) {
           // todo: error.message содержит больше данных
-          throw new Error('attachmentInfos error.');
+          return Promise.reject(new Error('attachmentInfos error.'));
         }
         return resBody;
       });
@@ -389,7 +396,7 @@ var FeatureServer = function () {
         log(id, 3);
         log(id, resBody.type);
         if (!(resBody.type && resBody.type === 'Feature Layer')) {
-          throw new Error('Passed URL seems to be not an Arcgis FeatureServer REST endpoint');
+          return Promise.reject(new Error('Passed URL seems to be not an Arcgis FeatureServer' + ' REST endpoint'));
         }
         return resBody;
       });
