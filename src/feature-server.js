@@ -188,8 +188,10 @@ var FeatureServer = function () {
     }
   }, {
     key: 'add',
-    value: function add(features) {
+    value: function add() {
       var _this4 = this;
+
+      var features = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 
       var params = {
         features: JSON.stringify(features)
@@ -207,8 +209,10 @@ var FeatureServer = function () {
     }
   }, {
     key: 'update',
-    value: function update(features) {
+    value: function update() {
       var _this5 = this;
+
+      var features = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 
       var params = {
         features: JSON.stringify(features)
@@ -226,7 +230,9 @@ var FeatureServer = function () {
     }
   }, {
     key: 'prepObjectIds',
-    value: function prepObjectIds(params) {
+    value: function prepObjectIds() {
+      var params = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
       if (params.objectIds) {
         if (Object.prototype.toString.call(params.objectIds) === '[object Array]') {
           params.objectIds = params.objectIds.join(', ');
@@ -240,8 +246,10 @@ var FeatureServer = function () {
     }
   }, {
     key: 'delete',
-    value: function _delete(params) {
+    value: function _delete() {
       var _this6 = this;
+
+      var params = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
       params = this.prepObjectIds(params);
       params.rollbackOnFailure = true;
@@ -249,17 +257,19 @@ var FeatureServer = function () {
       return this.checkToken(params).then(function (params) {
         return _this6.postRequest(_this6.featureServerUrl + '/deleteFeatures', params);
       }).then(function (resBody) {
-        if (!resBody.success) {
-          // todo: error.message содержит больше данных
+        if (resBody.success || resBody.deleteResults) {
+          return resBody;
+        } else {
           return Promise.reject(new Error('Delete error.'));
         }
-        return resBody;
       });
     }
   }, {
     key: 'addAttachment',
-    value: function addAttachment(props) {
+    value: function addAttachment() {
       var _this7 = this;
+
+      var props = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
       log('addAttachment props:', props);
       var params = {
@@ -280,8 +290,10 @@ var FeatureServer = function () {
     }
   }, {
     key: 'addAttach',
-    value: function addAttach(params) {
+    value: function addAttach() {
       var _this8 = this;
+
+      var params = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
       log('in addAttach');
       return new Promise(function (resolve) {
@@ -307,8 +319,10 @@ var FeatureServer = function () {
     }
   }, {
     key: 'addAttachmentUrl',
-    value: function addAttachmentUrl(props) {
+    value: function addAttachmentUrl() {
       var _this9 = this;
+
+      var props = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
       log('addAttachmentUrl props:', props);
       return this.checkToken().then(function (params) {
@@ -329,8 +343,10 @@ var FeatureServer = function () {
     }
   }, {
     key: 'deleteAttachment',
-    value: function deleteAttachment(props) {
+    value: function deleteAttachment() {
       var _this10 = this;
+
+      var props = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
       var params = {
         f: 'json',
@@ -380,9 +396,10 @@ var FeatureServer = function () {
     }
   }, {
     key: 'connect',
-    value: function connect(props) {
+    value: function connect() {
       var _this12 = this;
 
+      var props = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
       var id = arguments.length <= 1 || arguments[1] === undefined ? guid() : arguments[1];
       // Для теста id
       log(id, 1);
