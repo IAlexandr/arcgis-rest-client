@@ -1,7 +1,7 @@
 {
-  "name": "arcgis-rest-client",
-  "version": "0.0.6",
-  "description": "",
+  "name": "arcgis-api-client",
+  "version": "1.0.0",
+  "description": "ArcGIS Server REST API client module for Node.js",
   "main": "index.js",
   "scripts": {
     "eslint": "eslint lib/",
@@ -11,6 +11,24 @@
     "type": "git",
     "url": "git+https://github.com/IAlexandr/arcgis-rest-client.git"
   },
+  "keywords": [
+    "Esri",
+    "ArcGIS",
+    "Server",
+    "Auth",
+    "Authentication",
+    "Identify",
+    "Token",
+    "FeatureService",
+    "REST",
+    "API",
+    "Data",
+    "Client",
+    "Attachments",
+    "CRUD",
+    "JSON",
+    "Promise"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
