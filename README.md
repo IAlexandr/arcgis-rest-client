@@ -10,7 +10,7 @@ const featureServerUrl = 'http://your-arcgis-host/arcgis/rest/services/test/test
 const username = '****';
 const password = '****';
 
-const featureServer = FeatureServer({ featureServerUrl, username, password });
+const featureServer = new FeatureServer({ featureServerUrl, username, password });
 
 featureServer.connect().then(connected => {}).catch(err => {});
 
